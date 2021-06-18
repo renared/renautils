@@ -60,15 +60,26 @@ def subplot(*args, nrows='auto', ncols='auto', title=None, show=True):
     Example :
         subplot('plot', (x, y), {'title':'mon plot', 'xlabel':'abscisse', ...}, 'scatter', (x, y), ..., nrows=2, ncols='auto', title="Mes courbes") 
         subplot('imshow', (img,), {'scatter': ([10,42], [26,38])})
+        subplot(('plot', (t,s), {'title':'cosinus', 'axhline':(1)}), 'scatter', (t,s), 'imshow', (img,), title='ça marche bien :D')
     '''
+  
     n = 0 # number of subplots
-    nargs = len(args)
+    args = list(args) # c'est sale
     subplot_elms = []
+    
     i = 0
-    while i < nargs:
-        if args[i] not in ('plot', 'scatter', 'imshow') or i+1 >= nargs or type(args[i+1]) is not tuple:
+    
+    while i < len(args):
+        
+        if type(args[i]) is tuple and 2<=len(args[i])<=3: # c'est sale
+            tup = args[i]
+            args.pop(i)
+            for j, u in enumerate(tup) : args.insert(i+j, u)
+        
+        
+        if args[i] not in ('plot', 'scatter', 'imshow') or i+1 >= len(args) or type(args[i+1]) is not tuple:
             raise Exception
-        if i+2 < nargs and type(args[i+2]) is dict:
+        if i+2 < len(args) and type(args[i+2]) is dict:
             subplot_elms.append(args[i:i+2+1])
             i = i+3
         else:
