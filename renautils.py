@@ -8,7 +8,7 @@ from math import floor, ceil
 import sys
 import matplotlib.pyplot as plt
 
-def show(*args, nrows='auto', ncols='auto', title=None):
+def show(*args, nrows='auto', ncols='auto', title=None, colorbar=False, vmin=None, vmax=None):
     ''' 
     Example :
         show(im1, "Image 1", im2, "Image 2", im3, im4, ..., nrows=2, ncols='auto', title="Mes images") 
@@ -38,7 +38,10 @@ def show(*args, nrows='auto', ncols='auto', title=None):
     for arg in args:
         if type(arg) is tuple :
             plt.subplot(nrows, ncols, i)
-            plt.imshow(arg[0])
+            if vmin is not None and vmax is not None:
+                plt.imshow(arg[0], vmin=vmin, vmax=vmax)
+            else:
+                plt.imshow(arg[0])
             i+=1
             plt.title(arg[1])
             
@@ -47,11 +50,18 @@ def show(*args, nrows='auto', ncols='auto', title=None):
         
         else :
             plt.subplot(nrows, ncols, i)
-            plt.imshow(arg)
+            if vmin is not None and vmax is not None:
+                plt.imshow(arg, vmin=vmin, vmax=vmax)
+            else : plt.imshow(arg)
             i+=1
     
     if title!=None:
         plt.suptitle(title)
+    
+    if colorbar:
+        plt.colorbar()
+    
+    
     
     plt.show()
     
